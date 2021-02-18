@@ -47,6 +47,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ModalModule, MDBBootstrapModulesPro, MDBBootstrapModule } from 'ng-uikit-pro-standard';
 
 @NgModule({
   declarations: [
@@ -58,13 +60,19 @@ import { MatTableModule } from '@angular/material/table';
     CommonModule,
     RouterModule,
     SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatSidenavModule,
     MatDividerModule,
     FlexLayoutModule,
     MatCardModule,
     MatPaginatorModule,
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    ModalModule.forRoot(),
+    MDBBootstrapModulesPro.forRoot(),
+    MDBBootstrapModule.forRoot()
+
   ],
   providers: [
     DashboardService

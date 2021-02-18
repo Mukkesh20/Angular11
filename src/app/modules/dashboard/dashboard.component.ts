@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from '../dashboard.service';
 import { MatTableDataSource} from '@angular/material/table';
 import {MatPaginator } from '@angular/material/paginator';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ModalDirective } from 'ng-uikit-pro-standard';
 
 export interface PeriodicElement {
   name: string;
@@ -38,15 +40,26 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-
+  binding = "";
   bigChart = [];
   cards = [];
   pieChart = [];
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  validatingForm: FormGroup;
 
+  get subscriptionFormModalName() {
+    return this.validatingForm.get('subscriptionFormModalName');
+  }
+
+  get subscriptionFormModalEmail() {
+    return this.validatingForm.get('subscriptionFormModalEmail');
+  }
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  @ViewChild('frame') public frame: ModalDirective;
+
 
   constructor(private dashboardService: DashboardService) { }
 
@@ -56,6 +69,12 @@ export class DashboardComponent implements OnInit {
     this.pieChart = this.dashboardService.pieChart();
 
     this.dataSource.paginator = this.paginator;
+
+    this.validatingForm = new FormGroup({
+      subscriptionFormModalName: new FormControl('', Validators.required),
+      subscriptionFormModalEmail: new FormControl('', Validators.email)
+    });
+
   }
 
 }

@@ -52,7 +52,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { TableComponent } from './widgets/table/table.component';
-import { WavesModule, ButtonsModule, MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
+import { WavesModule, ButtonsModule, MDBBootstrapModulesPro, MDBBootstrapModule } from 'ng-uikit-pro-standard';
 
 @NgModule({
   declarations: [
@@ -79,7 +79,8 @@ import { WavesModule, ButtonsModule, MDBBootstrapModulesPro } from 'ng-uikit-pro
     ButtonsModule,
     MatTableModule,
     MatSortModule,
-    MDBBootstrapModulesPro.forRoot()
+    MDBBootstrapModulesPro.forRoot(),
+    MDBBootstrapModule.forRoot()
   ],
   exports: [
     HeaderComponent,
