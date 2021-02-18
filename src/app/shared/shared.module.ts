@@ -1,3 +1,4 @@
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -79,6 +80,8 @@ import { WavesModule, ButtonsModule, MDBBootstrapModulesPro, MDBBootstrapModule 
     ButtonsModule,
     MatTableModule,
     MatSortModule,
+    FormsModule,
+    ReactiveFormsModule,
     MDBBootstrapModulesPro.forRoot(),
     MDBBootstrapModule.forRoot()
   ],

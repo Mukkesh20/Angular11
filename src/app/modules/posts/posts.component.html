@@ -1,9 +1,10 @@
 
+<div class="main-container" >
 <button type="button" mdbBtn color="default" class="relative waves-light" rounded="true" data-toggle="modal" data-target="#basicExample"
         (click)="frame.show()" mdbWavesEffect>Launch Modal
 </button>
-<div mdbModal #frame="mdbModal" class="fade" id="frameModalTop" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
+<div appendTo="body" mdbModal #frame="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true"
+    [config]="{backdrop: false, ignoreBackdropClick: true}">
   <div class="modal-dialog" >
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -52,4 +53,5 @@
     </div>
   </div>
 
+</div>
 </div>
