@@ -1,8 +1,12 @@
+import { AssetData } from './../assetData';
 import { ModalDirective } from 'ng-uikit-pro-standard';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
+
+import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
 
 
 export interface PeriodicElement {
@@ -11,7 +15,7 @@ export interface PeriodicElement {
   weight: number;
   symbol: string;
 }
-let ELEMENT_DATA: PeriodicElement[] = [
+const ELEMENT_DATA: PeriodicElement[] = [
   { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
   { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
   { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
@@ -25,6 +29,7 @@ let ELEMENT_DATA: PeriodicElement[] = [
 ];
 
 
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -33,11 +38,16 @@ let ELEMENT_DATA: PeriodicElement[] = [
 export class TableComponent implements AfterViewInit, OnInit {
   editMode = false;
   idToUpdate;
-  totalInvested =0;
-  totalValue=0;
+  totalInvested = 0;
+  totalValue = 0;
   validatingForm: FormGroup;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
+  editField: string;
+  personList: Array<any> = [];
+  data: AssetData[] = [];
+  resp: any = {};
+  isLoadingResults = true;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('frame') public frame: ModalDirective;
@@ -63,32 +73,37 @@ export class TableComponent implements AfterViewInit, OnInit {
     return ELEMENT_DATA.map(t => t.weight).reduce((acc, value) => acc + value, 0);
   }
 
+  constructor(private apollo: Apollo) {
+  }
+
+
   ngOnInit() {
     this.validatingForm = new FormGroup({
       modalName: new FormControl('', Validators.required),
       modalInvested: new FormControl('', Validators.required),
       modalValue: new FormControl('', Validators.required)
     });
-  }
 
-  editField: string;
-  personList: Array<any> = [
-    { id: 1, name: 'Aurelia Vega', invested: 30, value: 40 },
-    { id: 2, name: 'Aurelia Vega', invested: 30, value: 45 },
-    { id: 3, name: 'Aurelia Vega', invested: 30, value: 20 },
-    { id: 4, name: 'Aurelia Vega', invested: 30, value: 25 },
-  ];
+    this.apollo.query({
+      query: gql `{ AssetDatas { _id, type, name, invested, value } }`
+    }).subscribe(res => {
+      this.resp = res;
+      this.data = this.resp.data.books;
+      console.log(this.data);
+      this.isLoadingResults = false;
+    });
+  }
 
 
 
   updateList(id: number, property: string, event: any) {
-    const editField = event.target.textContent;
-    this.personList[id][property] = editField;
+    this.editField = event.target.textContent;
+    this.personList[id][property] = this.editField;
   }
 
   updateList1(id: number, property: string, event: any) {
-    const editField = event.target.textContent;
-    ELEMENT_DATA[id][property] = editField;
+    this.editField = event.target.textContent;
+    ELEMENT_DATA[id][property] = this.editField;
   }
 
   changeValue1(id: number, property: string, event: any) {
@@ -112,33 +127,39 @@ export class TableComponent implements AfterViewInit, OnInit {
   }
 
   getProfitLossPercent() {
-    return ((this.getTotalValue() - this.getTotalInvestedAmount())*100/this.getTotalInvestedAmount()).toFixed(2) + " %";
+    return ((this.getTotalValue() - this.getTotalInvestedAmount()) * 100 / this.getTotalInvestedAmount()).toFixed(2) + ' %';
   }
 
   update(id: any) {
     this.editMode = true;
     this.idToUpdate = id;
-    console.log(this.idToUpdate)
+    console.log(this.idToUpdate);
     this.frame.show();
-    this.validatingForm.setValue({ modalName: this.personList[this.idToUpdate].name, modalInvested: this.personList[this.idToUpdate].invested, modalValue: this.personList[this.idToUpdate].value });
+    this.validatingForm.setValue({
+      modalName: this.personList[this.idToUpdate].name,
+       modalInvested: this.personList[this.idToUpdate].invested,
+       modalValue: this.personList[this.idToUpdate].value
+      });
   }
 
   updateData() {
 
-    console.log(this.idToUpdate)
-    let newData = this.personList.map(el => {
-      if (el.id == this.idToUpdate+1) {
-        return Object.assign({}, el, {id: this.idToUpdate,  name: this.modalName.value, invested: this.modalInvested.value, value: this.modalValue.value })
+    console.log(this.idToUpdate);
+    const newData = this.personList.map(el => {
+      if (el.id === this.idToUpdate + 1) {
+        return Object.assign({}, el, {
+          id: this.idToUpdate,
+          name: this.modalName.value,
+          invested: this.modalInvested.value,
+          value: this.modalValue.value
+        });
       }
-      return el
+      return el;
     });
     this.personList = newData;
-    // this.validatingForm.setValue({ modalName : this.personList[this.idToUpdate].name, modalInvested: this.personList[this.idToUpdate].invested, modalValue: this.personList[this.idToUpdate].value});
-    // const person = {id: this.idToUpdate, name : this.modalName.value, invested: this.modalInvested.value, value: this.modalValue.value};
-    //  this.personList.push(person);
     this.frame.hide();
     this.validatingForm.reset();
-    console.log(this.personList)
+    console.log(this.personList);
 
   }
 
@@ -149,12 +170,21 @@ export class TableComponent implements AfterViewInit, OnInit {
   }
 
   addData() {
-
-    const person = { id: this.personList[this.personList.length - 1]['id'] + 1, name: this.modalName.value, invested: this.modalInvested.value, value: this.modalValue.value };
+    let person;
+    if(this.personList.length === 0){
+       person = { id: 1, name: this.modalName.value, invested: this.modalInvested.value, value: this.modalValue.value };
+    }else{
+       person = {
+         id: this.personList[this.personList.length - 1]['id'] + 1,
+         name: this.modalName.value,
+         invested: this.modalInvested.value,
+         value: this.modalValue.value
+        };
+    }
     this.personList.push(person);
     this.frame.hide();
     this.validatingForm.reset();
-    console.log(this.personList)
+    console.log(this.personList);
   }
 
   changeValue(id: number, property: string, event: any) {
