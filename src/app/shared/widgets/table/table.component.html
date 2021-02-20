@@ -1,23 +1,45 @@
-<!-- Editable table -->
 <div class="container">
-<div class="card">
-  <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Editable table</h3>
-  <div class="card-body">
-    <div id="table" class="table-editable">
-      <span class="table-add float-right mb-3 mr-2">
-        <a class="text-success" type="button" mdbBtn color="default" class="relative waves-light" rounded="true" data-toggle="modal" data-target="#basicExample"
-        (click)="addNewData()" mdbWavesEffect>
-          <mdb-icon fas icon="plus" size="2x"></mdb-icon>
-        </a>
-      </span>
-      <table class="table table-bordered table-responsive-md table-striped text-center">
-        <tr>
+  <div class="row">
+  <div class="col">
+    <div class="w-auto p-3">
+<mdb-card cascade="true" narrower="true" class="aqua-gradient">
+  <!--Card image-->
+  <div class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+
+    <div>
+      <button mdbBtn color="white" (click)="addNewData()" outline="true" rounded="true" size="sm" type="button" class="px-2" mdbWavesEffect>ADD
+        <mdb-icon fas icon="plus" class="mt-0"></mdb-icon>
+      </button>
+    </div>
+
+    <a href="" class="white-text mx-3">STOCKS</a>
+
+    <div>
+
+      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+        <mdb-icon fas icon="times" class="mt-0"></mdb-icon>
+      </button>
+
+    </div>
+
+  </div>
+  <!--/Card image-->
+
+  <div class="px-3 aqua-gradient">
+     <button mdbBtn type="button" rounded="true" size="sm" block="true" style="margin-up: -12px; font-weight: 600; font-size: 12px" gradient="purple" mdbWavesEffect>PROFIT/LOSS : {{ getProfitLoss() }} ({{ getProfitLossPercent() }})</button>
+
+    <div class="table-wrapper">
+      <!--Table-->
+      <table class="mb-0 " mdbTable hover="true">
+        <thead >
+        <tr >
           <th class="text-center">Name</th>
           <th class="text-center">Invested</th>
           <th class="text-center">Value</th>
-          <th class="text-center">Edit</th>
-          <th class="text-center">Remove</th>
+
         </tr>
+        </thead>
+        <tbody>
         <tr *ngFor="let person of personList; let id = index">
           <td>
             <span (keyup)="changeValue(id, 'name', $event)" (blur)="updateList(id, 'name', $event)" contenteditable="true">{{person.name}}</span>
@@ -28,26 +50,18 @@
           <td>
             <span contenteditable="false" (keyup)="changeValue(id, 'country', $event)" (blur)="updateList(id, 'country', $event)">{{person.value}}</span>
           </td>
-          <td>
-            <span class="table-add float-right mb-3 mr-2">
-        <a class="text-success" type="button" mdbBtn color="default" class="relative waves-light" rounded="true" data-toggle="modal" data-target="#basicExample"
-        (click)="update(id)" mdbWavesEffect>
-          <mdb-icon fas icon="edit" ></mdb-icon>
+        <a mdbBtn floating="true" size="sm" (click)="update(id)" color="orange" mdbWavesEffect>
+          <mdb-icon fas icon="edit" size="0.5x"></mdb-icon>
         </a>
-      </span>
-          </td>
-          <td>
-            <span class="table-add float-right mb-3 mr-2">
-        <a class="text-success" type="button" mdbBtn color="danger" class="relative waves-light" rounded="true" data-toggle="modal" data-target="#basicExample"
-        (click)="remove(id)" mdbWavesEffect>
+
+        <a mdbBtn floating="true" size="sm" (click)="remove(id)" color="red" mdbWavesEffect>
           <mdb-icon fas icon="trash-alt" ></mdb-icon>
         </a>
-      </span>
-          </td>
+
         </tr>
-        <tr>
-          <td style = "">
-            <span style = "fontweight: bold" contenteditable="true">Total</span>
+        <tr >
+          <td >
+            <span  contenteditable="true">Total</span>
           </td>
           <td>
             <span contenteditable="false">{{ getTotalInvestedAmount() }}</span>
@@ -55,55 +69,177 @@
           <td>
             <span contenteditable="false">{{ getTotalValue() }}</span>
           </td>
-          <td>
-            <span contenteditable="false">{{ getProfitLoss() }}</span>
-          </td>
-          <td>
-            <span contenteditable="false">{{ getProfitLossPercent() }}</span>
-          </td>
         </tr>
+        </tbody>
       </table>
+      <!--Table-->
     </div>
   </div>
-</div>
-<div class="example-container mat-elevation-z8">
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-
-  <!-- Position Column -->
-  <ng-container matColumnDef="position">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-    <td mat-footer-cell *matFooterCellDef> Total </td>
-  </ng-container>
-
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-    <td mat-cell contenteditable="true" *matCellDef="let element"> {{element.name}} </td>
-    <td mat-footer-cell *matFooterCellDef> Total </td>
-  </ng-container>
-
-  <!-- Weight Column -->
-  <ng-container matColumnDef="weight">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Weight </th>
-    <td mat-cell contenteditable="true" (keyup)="changeValue1(id, 'weight', $event)" (blur)="updateList1(id, 'weight', $event)" *matCellDef="let element"> {{element.weight }} </td>
-    <td mat-footer-cell *matFooterCellDef> {{getTotalCost()}} </td>
-  </ng-container>
-
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Symbol </th>
-    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-    <td mat-footer-cell *matFooterCellDef> Total </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-   <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: false"></tr>
-</table>
+</mdb-card>
 </div>
 </div>
+<div class="col">
+<div class="w-auto p-3">
+<mdb-card cascade="true" narrower="true" class="aqua-gradient">
+  <!--Card image-->
+  <div class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+
+    <div>
+      <button mdbBtn color="white" (click)="addNewData()" outline="true" rounded="true" size="sm" type="button" class="px-2" mdbWavesEffect>ADD
+        <mdb-icon fas icon="plus" class="mt-0"></mdb-icon>
+      </button>
+    </div>
+
+    <a href="" class="white-text mx-3">STOCKS</a>
+
+    <div>
+
+      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+        <mdb-icon fas icon="times" class="mt-0"></mdb-icon>
+      </button>
+
+    </div>
+
+  </div>
+  <!--/Card image-->
+
+  <div class="px-3 aqua-gradient">
+     <button mdbBtn type="button" rounded="true" size="sm" block="true" style="margin-up: -12px; font-weight: 600; font-size: 12px" gradient="purple" mdbWavesEffect>PROFIT/LOSS : {{ getProfitLoss() }} ({{ getProfitLossPercent() }})</button>
+
+    <div class="table-wrapper">
+      <!--Table-->
+      <table class="mb-0 " mdbTable hover="true">
+        <thead >
+        <tr >
+          <th class="text-center">Name</th>
+          <th class="text-center">Invested</th>
+          <th class="text-center">Value</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let person of personList; let id = index">
+          <td>
+            <span (keyup)="changeValue(id, 'name', $event)" (blur)="updateList(id, 'name', $event)" contenteditable="true">{{person.name}}</span>
+          </td>
+          <td>
+            <span contenteditable="false" (keyup)="changeValue(id, 'age', $event)" (blur)="updateList(id, 'age', $event)">{{person.invested}}</span>
+          </td>
+          <td>
+            <span contenteditable="false" (keyup)="changeValue(id, 'country', $event)" (blur)="updateList(id, 'country', $event)">{{person.value}}</span>
+          </td>
+        <a mdbBtn floating="true" size="sm" (click)="update(id)" color="orange" mdbWavesEffect>
+          <mdb-icon fas icon="edit" size="0.5x"></mdb-icon>
+        </a>
+
+        <a mdbBtn floating="true" size="sm" (click)="remove(id)" color="red" mdbWavesEffect>
+          <mdb-icon fas icon="trash-alt" ></mdb-icon>
+        </a>
+
+        </tr>
+        <tr >
+          <td >
+            <span  contenteditable="true">Total</span>
+          </td>
+          <td>
+            <span contenteditable="false">{{ getTotalInvestedAmount() }}</span>
+          </td>
+          <td>
+            <span contenteditable="false">{{ getTotalValue() }}</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <!--Table-->
+    </div>
+  </div>
+</mdb-card>
+</div>
+</div>
+<div class="col">
+<div class="w-auto p-3">
+<mdb-card cascade="true" narrower="true" class="aqua-gradient">
+  <!--Card image-->
+  <div class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+
+    <div>
+      <button mdbBtn color="white" (click)="addNewData()" outline="true" rounded="true" size="sm" type="button" class="px-2" mdbWavesEffect>ADD
+        <mdb-icon fas icon="plus" class="mt-0"></mdb-icon>
+      </button>
+    </div>
+
+    <a href="" class="white-text mx-3">STOCKS</a>
+
+    <div>
+
+      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+        <mdb-icon fas icon="times" class="mt-0"></mdb-icon>
+      </button>
+
+    </div>
+
+  </div>
+  <!--/Card image-->
+
+  <div class="px-3 aqua-gradient">
+     <button mdbBtn type="button" rounded="true" size="sm" block="true" style="margin-up: -12px; font-weight: 600; font-size: 12px" gradient="purple" mdbWavesEffect>PROFIT/LOSS : {{ getProfitLoss() }} ({{ getProfitLossPercent() }})</button>
+
+    <div class="table-wrapper">
+      <!--Table-->
+      <table class="mb-0 " mdbTable hover="true">
+        <thead >
+        <tr >
+          <th class="text-center">Name</th>
+          <th class="text-center">Invested</th>
+          <th class="text-center">Value</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let person of personList; let id = index">
+          <td>
+            <span (keyup)="changeValue(id, 'name', $event)" (blur)="updateList(id, 'name', $event)" contenteditable="true">{{person.name}}</span>
+          </td>
+          <td>
+            <span contenteditable="false" (keyup)="changeValue(id, 'age', $event)" (blur)="updateList(id, 'age', $event)">{{person.invested}}</span>
+          </td>
+          <td>
+            <span contenteditable="false" (keyup)="changeValue(id, 'country', $event)" (blur)="updateList(id, 'country', $event)">{{person.value}}</span>
+          </td>
+        <a mdbBtn floating="true" size="sm" (click)="update(id)" color="orange" mdbWavesEffect>
+          <mdb-icon fas icon="edit" size="0.5x"></mdb-icon>
+        </a>
+
+        <a mdbBtn floating="true" size="sm" (click)="remove(id)" color="red" mdbWavesEffect>
+          <mdb-icon fas icon="trash-alt" ></mdb-icon>
+        </a>
+
+        </tr>
+        <tr >
+          <td >
+            <span  contenteditable="true">Total</span>
+          </td>
+          <td>
+            <span contenteditable="false">{{ getTotalInvestedAmount() }}</span>
+          </td>
+          <td>
+            <span contenteditable="false">{{ getTotalValue() }}</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <!--Table-->
+    </div>
+  </div>
+</mdb-card>
+</div>
+</div>
+</div>
+
+
 <!-- Editable table -->
+
+
 <button type="button" mdbBtn color="default" class="relative waves-light" rounded="true" data-toggle="modal" data-target="#basicExample"
         (click)="frame.show()" mdbWavesEffect>Launch Modal
 </button>
@@ -167,4 +303,3 @@
   </div>
 
 </div>
-

@@ -1,7 +1,6 @@
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-angular-link-http';
-import { APOLLO_OPTIONS } from 'apollo-angular';
+
 import { HttpClientModule } from '@angular/common/http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -58,6 +57,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { TableComponent } from './widgets/table/table.component';
 import { WavesModule, ButtonsModule, MDBBootstrapModulesPro, MDBBootstrapModule } from 'ng-uikit-pro-standard';
+import { Apollo, APOLLO_OPTIONS } from 'apollo-angular';
+import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import { WavesModule, ButtonsModule, MDBBootstrapModulesPro, MDBBootstrapModule 
     MatGridListModule,
     ReactiveFormsModule,
     HttpClientModule,
+    HttpLinkModule,
     MDBBootstrapModulesPro.forRoot(),
     MDBBootstrapModule.forRoot()
   ],
@@ -103,19 +105,18 @@ import { WavesModule, ButtonsModule, MDBBootstrapModulesPro, MDBBootstrapModule 
     MatIconModule
   ],
   providers: [
-
-      {
-        provide: APOLLO_OPTIONS,
-        useFactory(httpLink: HttpLink) {
-          return {
-            cache: new InMemoryCache(),
-            link: httpLink.create({
-              uri: 'http://localhost:3000/',
-            }),
-          };
-        },
-        deps: [HttpLink],
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory(httpLink: HttpLink) {
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: 'http://localhost:3000/graphql',
+          }),
+        };
       },
+      deps: [HttpLink],
+    },
   ],
 })
 export class SharedModule { }

@@ -15,6 +15,7 @@ import {HttpLinkModule, HttpLink} from 'apollo-angular-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 //import { InMemoryCache } from '@apollo/client/core';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +31,7 @@ import {InMemoryCache} from 'apollo-cache-inmemory';
     WavesModule,
     ButtonsModule,
     HttpClientModule,
+    HttpLinkModule,
     MDBBootstrapModulesPro.forRoot(),
     MDBBootstrapModule.forRoot()
   ],

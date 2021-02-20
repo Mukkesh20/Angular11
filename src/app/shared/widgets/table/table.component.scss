@@ -2,6 +2,7 @@
   tr  {
     td {
       vertical-align: middle !important;
+      font-weight: 600;
     }
     span {
       &:not([class]) {
@@ -11,8 +12,12 @@
   }
 }
 
-table {
-  width: 100%;
+th{
+  font-weight: 900
+}
+
+td{
+  font-weight: 100
 }
 
 th.mat-sort-header-sorted {
@@ -20,9 +25,21 @@ th.mat-sort-header-sorted {
 }
 
 tr.mat-footer-row {
-  font-weight: bold;
+  font-weight: 900;
 }
 
 .mat-table-sticky {
   border-top: 1px solid #e0e0e0;
+}
+
+.success{
+  background-color: greenyellow;
+}
+
+.danger {
+  background-color: red;
+}
+
+.table th, .table td {
+  padding: -0.25rem;
 }
