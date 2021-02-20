@@ -1,3 +1,4 @@
+import gql from 'graphql-tag';
 import { AssetData } from './../assetData';
 import { ModalDirective } from 'ng-uikit-pro-standard';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -6,7 +7,6 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 
 import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 
 
 export interface PeriodicElement {
